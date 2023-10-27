@@ -24,7 +24,29 @@ router.delete('/:userId', (req, res) => {
         res.send({indexOfUser});
     }
    
-   });
+});
+
+//Update user
+
+router.put('/updateUser', (req,res) =>{
+    const userIdToUpdate = req.body.id;
+    const newUsername = req.body.newUsername;
+
+    const userToUpdate = users.find( (user) => user.id === userIdToUpdate);
+
+    if(userToUpdate === undefined){
+        res.send('Impossibile aggiornare, utente non trovato');
+    }
+    else{
+        const userIndexToUpdate = users.findIndex((user) => user.id === userIdToUpdate);
+        users[userIndexToUpdate].username = newUsername;
+        console.log(users[userIndexToUpdate]);
+        res.send('Username aggiornato');
+    }
+
+    
+
+});
 
 
 
