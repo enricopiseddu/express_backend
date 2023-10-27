@@ -25,7 +25,9 @@ router.post('/', async (req,res) => {
             if(isMatch){
                 //We create a JWT
                 const token = await JWT.sign(
-                    {name}, //bad idea!
+                    { id: userFound.id,
+                        username: userFound.username
+                    },
                         "fijerionfrioo3324jeewq" /*secretKey*/, 
                     {expiresIn:  36000} //in seconds
                 );
