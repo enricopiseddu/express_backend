@@ -25,7 +25,7 @@ router.post('/', async(req,res) => {
         res.send('You have registered');
     }
     else{
-        res.send('user already registered')
+        res.status(409).send('user already registered')
     }
 })
 

@@ -18,7 +18,7 @@ router.post('/', async (req,res) => {
 
         if(userFound === undefined){
             console.log('user not found');
-            res.send('Invalid credential');
+            res.status(401).send('Invalid credential');
         }
         else{
             var isMatch = await bcrypt.compare(password, userFound.password)
@@ -35,7 +35,7 @@ router.post('/', async (req,res) => {
                 res.json({token});
             }
             else{
-                res.send('Invalid credentials');
+                res.status(401).send('Invalid credentials');
             }
         }
 
