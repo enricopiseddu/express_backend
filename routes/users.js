@@ -3,11 +3,14 @@ const express = require('express');
 const checkJWT = require('../middleware/checkJWT');
 const router = express.Router();
 
-const users = require("../data/Users")
-const JWT = require('jsonwebtoken');
+const users = require("../data/Users");
 
-router.get('/', /*checkJWT ,*/(req,res) => {
-    res.send(users); 
+router.get('/', /*checkJWT ,*/ async (req,res) => {
+    console.log('called get on users')
+    
+    console.log(users);
+    res.send(users);
+
 });
 
 router.delete('/:userId', (req, res) => {
