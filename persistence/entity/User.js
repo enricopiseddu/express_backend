@@ -1,7 +1,8 @@
-const { EntitySchema } = require("typeorm");
+const  EntitySchema = require("typeorm").EntitySchema;
 
-const userEntitySchema = new EntitySchema({
-  name: "users",
+const userEntitySchema  = new EntitySchema({
+  name: "User",
+  tableName: 'users',
   columns: {
     id: {
       primary: true,
@@ -9,9 +10,11 @@ const userEntitySchema = new EntitySchema({
     },
     username: {
       type: "varchar",
+      nullable: true,
     },
     hashedPassword: {
       type: "varchar",
+      nullable: true,
     },
   },
 });

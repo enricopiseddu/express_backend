@@ -2,22 +2,29 @@ const express = require('express');
 //const uuid = require('uuid');
 const checkJWT = require('../middleware/checkJWT');
 const router = express.Router();
-
+const dataSource = require('./../persistence/database')
+const userEntitySchema = require('./../persistence/entity/User')
+const userRepository = dataSource.getRepository(userEntitySchema)
 const users = require("../data/Users");
 
 router.get('/', /*checkJWT ,*/ async (req,res) => {
-    console.log('called get on users')
+    //console.log('called get on users')
     
-    console.log(users);
-    res.send(users);
+    const usersFromDb = await userRepository.find();
+    //console.log(usersFromDb);
+    res.send(usersFromDb);
 
 });
 
-router.delete('/:userId', (req, res) => {
+router.delete('/:userId', async(req, res) => {
     const idToDelete = req.params.userId;
 
-    const userToDelete = users.find( (user) => user.id === idToDelete);
+    //const userToDelete = users.find( (user) => user.id === idToDelete);
 
+    const userToDelete = await userRepository.findOneBy({id: idToDelete});
+
+    console.log('user to delete is', userToDelete);
+/*
     if (userToDelete === undefined){
         res.send('Impossibile cancellare, utente non trovato');
     }else{
@@ -25,6 +32,13 @@ router.delete('/:userId', (req, res) => {
         users.splice(indexOfUser, 1); //a partire dall'indice (1° arg), ne cancella tot (2° argom)
 
         res.send({indexOfUser});
+    }*/
+
+    if(userToDelete){
+        await userRepository.remove(userToDelete);
+        res.send('user deleted correctly');
+    }else{
+        res.status(404).send('user to delete not found');
     }
    
 });

@@ -4,9 +4,9 @@ const cors = require('cors');
 const app = express();
 
 const dataSource = require('./persistence/database');
-const userEntity = require('./persistence/entity/User.js');
-const { createConnection } = require('typeorm');
-const { connect } = require('http2');
+const userEntitySchema = require('./persistence/entity/User.js');
+
+//const {getRepository} = require('typeorm');
 
 // Body parser middleware
 app.use(express.json());
@@ -23,13 +23,17 @@ app.use('/posts', require('./routes/posts'));
 const PORT = process.env.PORT || 5000;
 
 
-const connectionDb = dataSource.initialize().then(connection => {
+dataSource.initialize().then( () => {
     console.log('db connection ok');
+
 }).catch( (err) => {
     console.log('error is ' + err)
-})
+});
+
+
 
 
 app.listen(PORT, () => console.log('Server started on port ', PORT));
 
-module.export = connectionDb;
+
+//module.export = connectionDb;
