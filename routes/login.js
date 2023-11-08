@@ -1,27 +1,31 @@
 const express = require('express');
-//const uuid = require('uuid');
 const router = express.Router();
 const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const users = require("../data/Users");
+const dataSource = require('../persistence/database');
+const userEntitySchema = require('../persistence/entity/User');
 
 router.get('/', (req,res) => {
     res.send('Login page');
 })
 
+
+//Login of a user
 router.post('/', async (req,res) => {
         
-        var name =  req.body.username;
-        var password = req.body.password;
+        var formUsername =  req.body.username;
+        var formPassword = req.body.password;
     
-        var userFound = users.find( (user) => user.username === name);
+        const userRepository = dataSource.getRepository(userEntitySchema);
+
+        const userFound = await userRepository.findOneBy({username: formUsername}); 
 
         if(userFound === undefined){
             console.log('user not found');
             res.status(401).send('Invalid credential');
         }
         else{
-            var isMatch = await bcrypt.compare(password, userFound.password)
+            var isMatch = await bcrypt.compare(formPassword, userFound.hashedPassword)
             if(isMatch){
                 //We create a JWT
                 const token = await JWT.sign(
@@ -38,8 +42,6 @@ router.post('/', async (req,res) => {
                 res.status(401).send('Invalid credentials');
             }
         }
-
-        
 })
 
 module.exports = router;
