@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const dataSource = require('./persistence/database');
+const dataSource = require('./persistence/dataSource');
 
 // Body parser middleware
 app.use(express.json());
