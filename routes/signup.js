@@ -3,10 +3,6 @@ const uuid4 = require('uuid4');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const repository = require('../persistence/Repository');
-//const users = require("../data/Users");
-/* const dataSource = require('../persistence/dataSource');
-const userEntitySchema = require('../persistence/entity/User');
-const {User} = require('../persistence/entity/User'); */
 
 
 router.get('/', (req,res) => {
@@ -14,27 +10,30 @@ router.get('/', (req,res) => {
 })
 
 
-//Sigup of an user by form
+//Signup of an user by form
 router.post('/', async(req,res) => {
+    try{    
+        var formUsername = req.body.username;
+        var formPassword = req.body.password;
+
+        const userFound = await repository.findUserByUsername(formUsername);
         
-    var formUsername = req.body.username;
-    var formPassword = req.body.password;
+        console.log('user found is ')
+        console.log(userFound)
 
-    const userFound = await repository.findUserByUsername(formUsername);
-    
-    console.log('user found is ')
-    console.log(userFound)
+        if(userFound === null){
+            var _hashedPassword = await bcrypt.hash(formPassword, 10);
 
-    if(userFound === null){
-        var _hashedPassword = await bcrypt.hash(formPassword, 10);
+            var userId = uuid4();
 
-        var userId = uuid4();
+            await repository.createNewUser(userId, formUsername, _hashedPassword);
 
-        await repository.createNewUser(userId, formUsername, _hashedPassword);
-
-        res.send('You have registered');
-    }else{
-        res.status(409).send('user already registered')
+            res.send('You have registered');
+        }else{
+            res.status(409).send('user already registered')
+        }
+    }catch(error){
+        res.status(500).send('Internal server error')
     }
 })
 

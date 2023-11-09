@@ -20,9 +20,14 @@ const createNewUser = async (_id, _username, _hashedPassword) => {
     await usersRepository.save(newUser);
 }
 
-const removeUser = async (userToRemove) => {
-    await usersRepository.remove(userToRemove);
+const removeUser = async (_userToRemove) => {
+    await usersRepository.remove(_userToRemove);
+}
+
+//update the username: equivalent to UPDATE users SET username='_newUsername' WHERE id='_userIdToUpdate'
+const updateUsername = async (_userIdToUpdate, _newUsername) => {
+    await usersRepository.update({id: _userIdToUpdate}, {username: _newUsername})
 }
 
 
-module.exports = {findAllUsers, findUserById, findUserByUsername, createNewUser, removeUser}
+module.exports = {findAllUsers, findUserById, findUserByUsername, createNewUser, removeUser, updateUsername}

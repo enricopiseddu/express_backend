@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-//const dataSource = require('../persistence/dataSource');
-//const userEntitySchema = require('../persistence/entity/User');
 const repository = require('../persistence/Repository');
 
 
@@ -15,37 +13,43 @@ router.get('/', (req,res) => {
 //Login of a user
 router.post('/', async (req,res) => {
         
-    var formUsername =  req.body.username;
-    var formPassword = req.body.password;
+    try{
+        var formUsername =  req.body.username;
+        var formPassword = req.body.password;
 
-    /* const userRepository = dataSource.getRepository(userEntitySchema);
+        var userFound = await repository.findUserByUsername(formUsername); 
 
-    const userFound = await userRepository.findOneBy({username: formUsername});  */
-
-    const userFound = await repository.findUserByUsername(formUsername); 
-    
-    if(userFound === null){
-        console.log('user not found');
-        res.status(401).send('Invalid credential');
-    }
-    else{
-        var isMatch = await bcrypt.compare(formPassword, userFound.hashedPassword)
-        if(isMatch){
-            //We create a JWT
-            const token = await JWT.sign(
-                { id: userFound.id,
-                    username: userFound.username
-                },
-                    "fijerionfrioo3324jeewq" /*secretKey*/, 
-                {expiresIn:  36000} //in seconds
-            );
-
-            res.json({token});
+        if(userFound === null){
+            console.log('user not found');
+            res.status(401).send('Invalid credential');
         }
         else{
-            res.status(401).send('Invalid credentials');
+            var isMatch = await bcrypt.compare(formPassword, userFound.hashedPassword)
+            if(isMatch){
+                //We create a JWT
+                const token = JWT.sign(
+                    {   
+                        id: userFound.id,
+                        username: userFound.username
+                    },
+                        "fijerionfrioo3324jeewq" /*secretKey*/, 
+                    {expiresIn:  36000} //in seconds
+                );
+    
+                res.json({token});
+            }
+            else{
+                res.status(401).send('Invalid credentials');
+            }
         }
+    }catch(e){
+        console.log('error is: ', e)
+        res.status(500).send('Internal server error');
+        return
     }
+
+
+    
 })
 
 module.exports = router;
