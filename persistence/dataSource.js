@@ -1,5 +1,6 @@
 const typeorm = require("typeorm");
-const userEntitySchema = require("./entity/User")
+const userEntitySchema = require("./entity/User");
+const postEntitySchema = require("./entity/Post");
 
 const dataSource = new typeorm.DataSource({
   type: "mysql",
@@ -8,7 +9,7 @@ const dataSource = new typeorm.DataSource({
   username: "root",
   password: "password",
   database: "MYDATABASE",
-  entities: [userEntitySchema],
+  entities: [userEntitySchema, postEntitySchema],
   synchronize: true,
 });
 

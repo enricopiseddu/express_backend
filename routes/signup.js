@@ -2,7 +2,7 @@ const express = require('express');
 const uuid4 = require('uuid4');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const repository = require('../persistence/Repository');
+const userRepository = require('../persistence/UserRepository');
 
 
 router.get('/', (req,res) => {
@@ -16,7 +16,7 @@ router.post('/', async(req,res) => {
         var formUsername = req.body.username;
         var formPassword = req.body.password;
 
-        const userFound = await repository.findUserByUsername(formUsername);
+        const userFound = await userRepository.findUserByUsername(formUsername);
         
         console.log('user found is ')
         console.log(userFound)
@@ -26,7 +26,7 @@ router.post('/', async(req,res) => {
 
             var userId = uuid4();
 
-            await repository.createNewUser(userId, formUsername, _hashedPassword);
+            await userRepository.createNewUser(userId, formUsername, _hashedPassword);
 
             res.send('You have registered');
         }else{

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const repository = require('../persistence/Repository');
+const userRepository = require('../persistence/UserRepository');
 
 
 router.get('/', (req,res) => {
@@ -17,7 +17,7 @@ router.post('/', async (req,res) => {
         var formUsername =  req.body.username;
         var formPassword = req.body.password;
 
-        var userFound = await repository.findUserByUsername(formUsername); 
+        var userFound = await userRepository.findUserByUsername(formUsername); 
 
         if(userFound === null){
             console.log('user not found');

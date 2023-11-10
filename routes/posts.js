@@ -2,12 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const checkJWT = require('../middleware/checkJWT');
-const posts = require('../data/Posts');
+
 const JWT = require('jsonwebtoken');
 
+const postsRepository = require('../persistence/PostRepository');
+
 //Everyone can see all posts
-router.get('/all',(req,res) => {
-    res.send(posts); 
+router.get('/all', async (req,res) => {
+    
+    try{
+        const posts = await postsRepository.getAllPostsWithUsername();
+        res.send(posts); 
+    } catch ( error ){
+        console.log('an error occurs: ' + error)
+        res.status(500).send('an error occurred ' + error)
+    }
+    
 })
 
 //Only users with a JWT can publish posts

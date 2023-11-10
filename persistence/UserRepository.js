@@ -1,6 +1,6 @@
 const dataSource = require('./dataSource');
-const userEntitySchema = require('./../persistence/entity/User')
-const usersRepository = dataSource.getRepository(userEntitySchema)
+const userEntitySchema = require('./../persistence/entity/User');
+const usersRepository = dataSource.getRepository(userEntitySchema);
 
 
 const findAllUsers = async () => {

@@ -1,7 +1,7 @@
 const express = require('express');
 //const checkJWT = require('../middleware/checkJWT');
 const router = express.Router();
-const repository = require('../persistence/Repository')
+const repository = require('../persistence/UserRepository')
 
 
 //Get all users
