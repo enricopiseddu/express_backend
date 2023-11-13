@@ -16,4 +16,12 @@ const getAllPostsWithUsername = async () => {
 }
 
 
-module.exports = {getAllPosts, getAllPostsWithUsername}
+// Create a new post
+const createNewPost = async (_id, _title, _notes, _user) => {
+    const newPost = await postsRepository.create({id: _id, title: _title, notes: _notes, userId: _user});
+    await postsRepository.save(newPost);
+}
+
+
+
+module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost}

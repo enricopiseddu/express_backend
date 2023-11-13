@@ -3,7 +3,7 @@ const router = express.Router();
 
 const checkJWT = require('../middleware/checkJWT');
 
-const JWT = require('jsonwebtoken');
+const uuid4 = require('uuid4');
 
 const postsRepository = require('../persistence/PostRepository');
 
@@ -21,20 +21,17 @@ router.get('/all', async (req,res) => {
 })
 
 //Only users with a JWT can publish posts
-router.post('/newPost', (req,res) => {
+router.post('/newPost', checkJWT, async(req,res) => {
     let title = req.body.title;
-    let content = req.body.content;
+    let notes = req.body.notes;
 
-    if( title.length === 0 || content.length === 0) {
+    if( title.length === 0 || notes.length === 0) {
         res.send('Title and contend are required');
     }
     else{
-        posts.push({title, content});
+        await postsRepository.createNewPost( uuid4(), title, notes, req.userId )
         res.send('post published');
     }
-
-    
-
 });
 
 

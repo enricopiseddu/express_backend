@@ -29,7 +29,7 @@ router.post('/', async (req,res) => {
                 //We create a JWT
                 const token = JWT.sign(
                     {   
-                        id: userFound.id,
+                        userId: userFound.id,
                         username: userFound.username
                     },
                         "fijerionfrioo3324jeewq" /*secretKey*/, 

@@ -19,7 +19,8 @@ module.exports = async( req, res, next) =>{
     //verify token
     try{
         let user = await JWT.verify(token, "fijerionfrioo3324jeewq");
-        req.user = user.email;
+        req.user = user.username;
+        req.userId = user.userId
         next();
     }catch (error){
         return res.status(400).json({
