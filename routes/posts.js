@@ -35,6 +35,37 @@ router.post('/newPost', checkJWT, async(req,res) => {
 });
 
 
+router.get('/personal', checkJWT, async(req,res) =>{
+    
+    const personalPosts = await postsRepository.getPostsOfUser(req.userId);
+    res.send(personalPosts);
+})
+
+router.delete('/delete/:id', checkJWT, async(req,res) =>{
+    
+    try{
+        postToDelete = await postsRepository.getPostById(req.params.id)
+        
+        //check if user is owner of the post
+        if( postToDelete[0].userId === req.userId){
+            await postsRepository.deletePost(postToDelete[0].id);
+            console.log('post delete correctly')
+            res.send('Post deleted correctly')
+        }else{
+            console.log('You are not the owner of the post')
+            res.status(403).send('You are not the owner of the post')
+        }
+
+    }catch (error){
+        console.log(error)
+        res.status(500).send('Internal error')
+    }
+
+
+})
+
+
+
 
 
 module.exports = router;
