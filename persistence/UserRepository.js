@@ -29,5 +29,10 @@ const updateUsername = async (_userIdToUpdate, _newUsername) => {
     await usersRepository.update({id: _userIdToUpdate}, {username: _newUsername})
 }
 
+const updatePassword = async (_userId, _newHashedPassword) => {
+    await usersRepository.update({id: _userId}, {hashedPassword: _newHashedPassword})
+}
 
-module.exports = {findAllUsers, findUserById, findUserByUsername, createNewUser, removeUser, updateUsername}
+
+
+module.exports = {findAllUsers, findUserById, findUserByUsername, createNewUser, removeUser, updateUsername, updatePassword}
