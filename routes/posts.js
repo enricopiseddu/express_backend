@@ -65,15 +65,16 @@ router.delete('/delete/:id', checkJWT, async(req,res) =>{
 
     
 router.get('/paginated', async (req,res) => {
-    const pagina = req.body.page;
-    const perPagina = req.body.perPage; //LIMIT
+    const pagina = req.query.page;
+    const perPagina = req.query.perPage; //LIMIT
 
     //calcolo offset
     const offset = (pagina - 1) * perPagina;
 
     try{
         const posts = await postsRepository.getAllPostsWithUsernamePaginated(perPagina, offset);
-        res.send(posts); 
+        const allPosts = await postsRepository.getAllPosts();
+        res.send({posts, numberOfPosts: allPosts.length}); 
     } catch ( error ){
         console.log('an error occurs: ' + error)
         res.status(500).send('an error occurred ' + error)
