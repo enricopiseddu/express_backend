@@ -60,9 +60,27 @@ router.delete('/delete/:id', checkJWT, async(req,res) =>{
         console.log(error)
         res.status(500).send('Internal error')
     }
-
-
 })
+
+
+    
+router.get('/paginated', async (req,res) => {
+    const pagina = req.body.page;
+    const perPagina = req.body.perPage; //LIMIT
+
+    //calcolo offset
+    const offset = (pagina - 1) * perPagina;
+
+    try{
+        const posts = await postsRepository.getAllPostsWithUsernamePaginated(perPagina, offset);
+        res.send(posts); 
+    } catch ( error ){
+        console.log('an error occurs: ' + error)
+        res.status(500).send('an error occurred ' + error)
+    }
+    
+})
+
 
 
 

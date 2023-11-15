@@ -34,6 +34,14 @@ const deletePost = async(_id) =>{
     await postsRepository.delete({id: _id});
 }
 
+const getAllPostsWithUsernamePaginated = async(limit, offset) => {
+    return await postsRepository.find({
+        relations: ["user"],
+        take: limit,
+        skip: offset
+    });
+}
 
 
-module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost, getPostsOfUser, getPostById, deletePost}
+
+module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost, getPostsOfUser, getPostById, deletePost, getAllPostsWithUsernamePaginated}
