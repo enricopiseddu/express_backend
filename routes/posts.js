@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
-const checkJWT = require('../middleware/checkJWT');
-
 const uuid4 = require('uuid4');
 
 const postsRepository = require('../persistence/PostRepository');
 
-//Everyone can see all posts
+
 router.get('/all', async (req,res) => {
     
     try{
@@ -21,7 +18,7 @@ router.get('/all', async (req,res) => {
 })
 
 //Only users with a JWT can publish posts
-router.post('/newPost', checkJWT, async(req,res) => {
+router.post('/newPost', async(req,res) => {
     let title = req.body.title;
     let notes = req.body.notes;
 
@@ -35,13 +32,13 @@ router.post('/newPost', checkJWT, async(req,res) => {
 });
 
 
-router.get('/personal', checkJWT, async(req,res) =>{
+router.get('/personal', async(req,res) =>{
     
     const personalPosts = await postsRepository.getPostsOfUser(req.userId);
     res.send(personalPosts);
 })
 
-router.delete('/delete/:id', checkJWT, async(req,res) =>{
+router.delete('/delete/:id', async(req,res) =>{
     
     try{
         postToDelete = await postsRepository.getPostById(req.params.id)
@@ -95,9 +92,4 @@ router.get('/search', async (req,res)=> {
 })
 
 
-
-
-
-
 module.exports = router;
-

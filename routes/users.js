@@ -1,11 +1,10 @@
 const express = require('express');
-//const checkJWT = require('../middleware/checkJWT');
 const router = express.Router();
 const repository = require('../persistence/UserRepository')
 
 
 //Get all users
-router.get('/', /*checkJWT ,*/ async (req,res) => {
+router.get('/', async (req,res) => {
     try{
         const usersFromDb = await repository.findAllUsers(); 
         

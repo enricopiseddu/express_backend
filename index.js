@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const checkJWT = require('./middleware/checkJWT');
 
 const dataSource = require('./persistence/dataSource');
 
@@ -12,9 +13,9 @@ app.use(cors());
 
 app.use('/', require('./routes/login'));
 app.use('/signup', require('./routes/signup'));
-app.use('/users', require('./routes/users'));
-app.use('/posts', require('./routes/posts'));
-app.use('/profile', require('./routes/profile'))
+app.use('/users', checkJWT, require('./routes/users'));
+app.use('/posts', checkJWT, require('./routes/posts'));
+app.use('/profile', checkJWT, require('./routes/profile'))
 
 const PORT = process.env.PORT || 5000;
 

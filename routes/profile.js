@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-
 const userRepository = require('../persistence/UserRepository');
-const checkJWT = require('../middleware/checkJWT');
 
 
-router.put('/updatePassword', checkJWT, async (req,res) =>{
+router.put('/updatePassword', async (req,res) =>{
     
     const actualPassword = req.body.actualPassword;
     const newPassword = req.body.newPassword;
@@ -27,8 +25,7 @@ router.put('/updatePassword', checkJWT, async (req,res) =>{
             res.status(409).send('Password does not match')
         }
     }
-
-
-
 })
+
+
 module.exports = router;
