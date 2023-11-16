@@ -82,6 +82,18 @@ router.get('/paginated', async (req,res) => {
     
 })
 
+router.get('/search', async (req,res)=> {
+    const string = req.query.string;
+
+    try{
+        const results = await postsRepository.getPostsContaining(string);
+        res.send(results);
+    }catch (error) {
+        console.log('an error occurs: ' + error)
+        res.status(500).send('an error occurred ' + error)
+    }
+})
+
 
 
 

@@ -1,6 +1,7 @@
 const dataSource = require('./dataSource');
 const postEntitySchema = require('./../persistence/entity/Post');
 const postsRepository = dataSource.getRepository(postEntitySchema);
+const {Like} = require('typeorm');
 
 const getAllPosts = async () => {
     return await postsRepository.find();
@@ -42,6 +43,17 @@ const getAllPostsWithUsernamePaginated = async(limit, offset) => {
     });
 }
 
+const getPostsContaining = async(_string) =>{
+    return await postsRepository.find({
+        relations: ["user"],
+        where: { 
+            notes: Like('%' + _string +'%')
+        }
+    })
+}
 
 
-module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost, getPostsOfUser, getPostById, deletePost, getAllPostsWithUsernamePaginated}
+
+module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost, getPostsOfUser, getPostById, deletePost, getAllPostsWithUsernamePaginated,
+
+    getPostsContaining}
