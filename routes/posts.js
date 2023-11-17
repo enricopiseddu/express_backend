@@ -4,6 +4,8 @@ const uuid4 = require('uuid4');
 
 const postsRepository = require('../persistence/PostRepository');
 
+const {loggerInfo} = require('../utils/logger');
+
 
 router.get('/all', async (req,res) => {
     
@@ -27,6 +29,7 @@ router.post('/newPost', async(req,res) => {
     }
     else{
         await postsRepository.createNewPost( uuid4(), title, notes, req.userId )
+        loggerInfo.info('User with username ' + req.username + ' published a post');
         res.send('post published');
     }
 });
@@ -35,6 +38,7 @@ router.post('/newPost', async(req,res) => {
 router.get('/personal', async(req,res) =>{
     
     const personalPosts = await postsRepository.getPostsOfUser(req.userId);
+    loggerInfo.info('User with username ' + req.username + ' made a GET to see all his posts');
     res.send(personalPosts);
 })
 

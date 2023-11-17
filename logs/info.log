@@ -1,0 +1,5 @@
+{
+  message: 'Server started on PORT 5000',
+  level: 'info',
+  timestamp: '2023-11-17T16:37:02.276Z'
+}
