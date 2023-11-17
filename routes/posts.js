@@ -42,7 +42,7 @@ router.delete('/delete/:id', async(req,res) =>{
     
     try{
         postToDelete = await postsRepository.getPostById(req.params.id)
-        
+        console.log(postToDelete)
         //check if user is owner of the post
         if( postToDelete[0].userId === req.userId){
             await postsRepository.deletePost(postToDelete[0].id);
@@ -88,6 +88,30 @@ router.get('/search', async (req,res)=> {
     }catch (error) {
         console.log('an error occurs: ' + error)
         res.status(500).send('an error occurred ' + error)
+    }
+})
+
+
+router.put('/update/:id', async(req,res) =>{
+    
+    try{
+        const postToUpdate = await postsRepository.getPostById(req.params.id)
+        console.log('req.params.id ' , req.params.id )
+        console.log('post to update ', postToUpdate )
+        console.log('req.userId ', req.userId)
+        //check if user is owner of the post
+        if( postToUpdate[0].userId === req.userId){
+            await postsRepository.updatePost(postToUpdate[0].id, req.body.title, req.body.notes);
+            console.log('post updated correctly')
+            res.send('Post updated correctly')
+        }else{
+            console.log('You are not the owner of the post')
+            res.status(403).send('You are not the owner of the post')
+        }
+
+    }catch (error){
+        console.log(error)
+        res.status(500).send('Internal error')
     }
 })
 

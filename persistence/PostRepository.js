@@ -52,8 +52,13 @@ const getPostsContaining = async(_string) =>{
     })
 }
 
+const updatePost = async(_id, _title, _notes) =>{
+
+    await postsRepository.update({id : _id}, { title: _title, notes: _notes});
+}
+
 
 
 module.exports = {getAllPosts, getAllPostsWithUsername, createNewPost, getPostsOfUser, getPostById, deletePost, getAllPostsWithUsernamePaginated,
 
-    getPostsContaining}
+    getPostsContaining, updatePost}
